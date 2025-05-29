@@ -42,12 +42,12 @@ def get_mock_headlines(date, ticker):
 
 # Feature Engineering
 def engineer_features(df, ticker):
-    df['MA_20'] = df['Adj Close'].rolling(window=20).mean()
-    df['MA_50'] = df['Adj Close'].rolling(window=50).mean()
-    df['MA_200'] = df['Adj Close'].rolling(window=200).mean()
-    df['Volatility'] = df['Adj Close'].rolling(window=20).std()
-    df['Return'] = df['Adj Close'].pct_change()
-    df['Future_Return'] = df['Adj Close'].shift(-20) / df['Adj Close'] - 1
+    df['MA_20'] = df['Close'].rolling(window=20).mean()
+    df['MA_50'] = df['Close'].rolling(window=50).mean()
+    df['MA_200'] = df['Close'].rolling(window=200).mean()
+    df['Volatility'] = df['Close'].rolling(window=20).std()
+    df['Return'] = df['Close'].pct_change()
+    df['Future_Return'] = df['Close'].shift(-20) / df['Close'] - 1
     df['Target'] = (df['Future_Return'] > 0.05).astype(int)
 
     sentiments = []
@@ -67,10 +67,13 @@ for ticker in stocks:
     end = pd.to_datetime(date_range[1]).strftime('%Y-%m-%d')
     raw_df = fetch_data(ticker, start, end)
     
+if isinstance(raw_df.columns, pd.MultiIndex):
+    raw_df.columns = raw_df.columns.get_level_values(1)
+    
     st.write(f"Raw data for {ticker} from {start} to {end}:")
     st.dataframe(raw_df)
     
-    if raw_df.empty or 'Adj Close' not in raw_df.columns:
+    if raw_df.empty or 'Close' not in raw_df.columns:
         st.warning(f"No data available for {ticker}. Skipping...")
         continue
 
