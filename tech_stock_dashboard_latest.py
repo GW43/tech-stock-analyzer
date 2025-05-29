@@ -68,7 +68,7 @@ for ticker in stocks:
     raw_df = fetch_data(ticker, start, end)
 
     if isinstance(raw_df.columns, pd.MultiIndex):
-    raw_df.columns = raw_df.columns.get_level_values(1)
+        raw_df.columns = raw_df.columns.get_level_values(1)
 
     raw_df = raw_df.loc[:, ~raw_df.columns.duplicated()]
     raw_df = raw_df.rename(columns={ticker: 'Close'})  # ✅ Normalize for modeling
@@ -84,8 +84,8 @@ for ticker in stocks:
     feature_data.append(processed_df)
 
     if not feature_data:
-    st.error("No valid stock data available for modeling. Try adjusting the date range or tickers.")
-    st.stop()
+        st.error("No valid stock data available for modeling. Try adjusting the date range or tickers.")
+        st.stop()
 
 data = pd.concat(feature_data)
 
