@@ -63,7 +63,7 @@ def engineer_features(df, ticker):
 feature_data = []
 for ticker in stocks:
     raw_df = fetch_data(ticker, str(date_range[0]), str(date_range[1]))
-    if raw_df.empty or 'Adj Close' not in raw_df.columns:
+if raw_df.empty or 'Adj Close' not in raw_df.columns:
     st.warning(f"No data available for {ticker}. Skipping...")
     continue
 
