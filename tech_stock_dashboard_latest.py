@@ -68,9 +68,10 @@ for ticker in stocks:
     raw_df = fetch_data(ticker, start, end)
 
     if isinstance(raw_df.columns, pd.MultiIndex):
-        raw_df.columns = raw_df.columns.get_level_values(1)
+    raw_df.columns = raw_df.columns.get_level_values(1)
 
-    raw_df = raw_df.loc[:, ~raw_df.columns.duplicated()]  # Remove duplicate column names
+    raw_df = raw_df.loc[:, ~raw_df.columns.duplicated()]
+    raw_df = raw_df.rename(columns={ticker: 'Close'})  # ✅ Normalize for modeling
 
     st.write(f"Raw data for {ticker} from {start} to {end}:")
     st.dataframe(raw_df.head(10))  # Only show first 10 rows
