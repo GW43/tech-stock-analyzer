@@ -83,7 +83,7 @@ for ticker in stocks:
     processed_df = engineer_features(raw_df.copy(), ticker)
     feature_data.append(processed_df)
 
-if not feature_data:
+    if not feature_data:
     st.error("No valid stock data available for modeling. Try adjusting the date range or tickers.")
     st.stop()
 
