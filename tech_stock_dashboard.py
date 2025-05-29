@@ -63,7 +63,12 @@ def engineer_features(df, ticker):
 feature_data = []
 for ticker in stocks:
     raw_df = fetch_data(ticker, str(date_range[0]), str(date_range[1]))
-    processed_df = engineer_features(raw_df.copy(), ticker)
+if raw_df.empty or 'Adj Close' not in raw_df.columns:
+    st.warning(f"No data available for {ticker}. Skipping...")
+    continue
+
+processed_df = engineer_features(raw_df.copy(), ticker)
+
     feature_data.append(processed_df)
 
 data = pd.concat(feature_data)
@@ -98,3 +103,6 @@ for ticker in stocks:
         ax.set_title(f"{ticker} with Buy Signals from Model (incl. Sentiment)")
         ax.legend()
         st.pyplot(fig)
+if data.empty:
+    st.error(\"No valid stock data available for modeling. Try adjusting the date range or tickers.\")
+    st.stop()
