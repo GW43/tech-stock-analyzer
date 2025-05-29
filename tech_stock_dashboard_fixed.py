@@ -63,7 +63,13 @@ def engineer_features(df, ticker):
 # Data aggregation and feature processing
 feature_data = []
 for ticker in stocks:
-    raw_df = fetch_data(ticker, str(date_range[0]), str(date_range[1]))
+    start = pd.to_datetime(date_range[0]).strftime('%Y-%m-%d')
+    end = pd.to_datetime(date_range[1]).strftime('%Y-%m-%d')
+    raw_df = fetch_data(ticker, start, end)
+    
+    st.write(f"Raw data for {ticker} from {start} to {end}:")
+    st.dataframe(raw_df)
+    
     if raw_df.empty or 'Adj Close' not in raw_df.columns:
         st.warning(f"No data available for {ticker}. Skipping...")
         continue
